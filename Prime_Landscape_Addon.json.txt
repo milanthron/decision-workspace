@@ -1,0 +1,244 @@
+﻿{
+  "meta": {
+    "schema_name": "Addon_Framework",
+    "schema_version": "1.1",
+    "addon_id": "PRIME_LANDSCAPE_ANALYSIS",
+    "addon_name": "Prime Landscape Analysis",
+    "created_utc": "2026-02-18T00:00:00Z",
+    "notes": "v1.1 adds competition intensity signal, explicit tiering rules, and explicit merge targets for deterministic insertion."
+  },
+  "enablement": {
+    "config_key": "prime_landscape.enabled",
+    "default": false,
+    "user_prompt_on_true": {
+      "prompt_id": "PLA_CONFIRM_RUN",
+      "trigger": "prime_landscape.enabled == true",
+      "message": "Prime Landscape is enabled. Run Prime Landscape Analysis now? (yes/no)",
+      "on_yes": "RUN_ADDON",
+      "on_no": "SKIP_ADDON"
+    }
+  },
+  "inputs_required": [
+    {
+      "id": "rfp_documents",
+      "description": "RFP packet documents and any addenda available."
+    },
+    {
+      "id": "company_profile",
+      "description": "Company_Profile.json used for fit/adjacency scoring and sub positioning."
+    }
+  ],
+  "inputs_optional": [
+    {
+      "id": "awarded_vendor_list",
+      "description": "Awarded vendor list text/CSV/PDF/screenshot from prior year(s)."
+    },
+    {
+      "id": "prior_issuance_list",
+      "description": "List of prior opportunities/issuances from portal."
+    },
+    {
+      "id": "portal_links",
+      "description": "Euna/Bonfire links to past opportunities and award pages (public pages only)."
+    }
+  ],
+  "tiering_rules": {
+    "definition": "Tiering is derived from fit_score_0_5. Thresholds are deterministic and must be applied consistently.",
+    "tier_1": "fit_score_0_5 >= 4.0",
+    "tier_2": "fit_score_0_5 >= 3.0 AND fit_score_0_5 < 4.0",
+    "tier_3": "fit_score_0_5 < 3.0"
+  },
+  "merge_targets": {
+    "report_section_targets": [
+      "Section 10) Target Primes & Contacts",
+      "Section 11) Outreach Templates"
+    ],
+    "merge_behavior": {
+      "section_10": "Populate or replace Section 10 with ranked prime targets, contact paths, and sub-positioning.",
+      "section_11": "If usable contact intel exists, inform outreach templates; otherwise leave Section 11 core templates unchanged."
+    }
+  },
+  "outputs": {
+    "report_insertion_blocks": [
+      {
+        "block_id": "PLA_SUMMARY",
+        "title": "Prime & Subcontracting Strategy",
+        "format_rules": [
+          "Headings + bullets only",
+          "Use ✅⚠️❌ 🟢🟡🔴 🚫",
+          "No tables in the report body"
+        ]
+      }
+    ],
+    "artifact_tables": [
+      {
+        "table_id": "PLA_PRIME_TARGETS",
+        "title": "Prime Targets (Ranked)",
+        "columns": [
+          "tier",
+          "company_name",
+          "category_bucket",
+          "fit_score_0_5",
+          "why_fit",
+          "contact_path_summary",
+          "confidence_0_1"
+        ]
+      },
+      {
+        "table_id": "PLA_CONTACT_INTEL",
+        "title": "Contact Intelligence (Public)",
+        "columns": [
+          "company_name",
+          "suggested_contact_name_or_role",
+          "suggested_title",
+          "email",
+          "phone",
+          "website",
+          "source_location",
+          "confidence_0_1",
+          "notes"
+        ]
+      }
+    ],
+    "signals": [
+      {
+        "signal_id": "PLA_COMPETITION_INTENSITY",
+        "title": "Competition Intensity",
+        "values_allowed": ["LOW", "MODERATE", "HIGH"],
+        "icon_mapping": {
+          "LOW": "🟢",
+          "MODERATE": "🟡",
+          "HIGH": "🔴"
+        }
+      }
+    ]
+  },
+  "workflow": {
+    "run_order": [
+      "PLA_1_IDENTIFY_PRIOR_MATCH",
+      "PLA_2_EXTRACT_AWARDEES",
+      "PLA_2B_COMPETITION_INTENSITY",
+      "PLA_3_CLASSIFY_VENDORS",
+      "PLA_4_SCORE_PRIMES_FOR_SUB",
+      "PLA_5_DISCOVER_CONTACT_PATHS",
+      "PLA_6_GENERATE_SUB_POSITIONING",
+      "PLA_7_OUTPUT_INSERTION_BLOCKS"
+    ],
+    "steps": [
+      {
+        "step_id": "PLA_1_IDENTIFY_PRIOR_MATCH",
+        "name": "Identify closest prior issuance",
+        "method": "Match by title similarity, category keywords, and reference number pattern",
+        "outputs": [
+          "closest_prior_ref",
+          "renewal_likelihood_assessment"
+        ]
+      },
+      {
+        "step_id": "PLA_2_EXTRACT_AWARDEES",
+        "name": "Extract awarded vendors",
+        "method": "Parse provided award lists; do not guess missing vendors",
+        "outputs": [
+          "awarded_vendor_names"
+        ]
+      },
+      {
+        "step_id": "PLA_2B_COMPETITION_INTENSITY",
+        "name": "Assess competition intensity signal",
+        "method": "Based on available award data: number of awarded vendors, apparent breadth of vendor categories, and whether awards appear single-winner vs multi-award. If data is insufficient, mark as MODERATE with ⚠️ and state why.",
+        "outputs": [
+          "competition_intensity_signal",
+          "competition_intensity_rationale"
+        ],
+        "signal_values": ["LOW", "MODERATE", "HIGH"]
+      },
+      {
+        "step_id": "PLA_3_CLASSIFY_VENDORS",
+        "name": "Bucket vendors",
+        "method": "Assign category_bucket: IT reseller, Office supply, School supply, Publisher, Promo, Facilities/JanSan, Specialty, Unknown",
+        "outputs": [
+          "bucketed_vendor_list"
+        ]
+      },
+      {
+        "step_id": "PLA_4_SCORE_PRIMES_FOR_SUB",
+        "name": "Score primes for subcontracting fit",
+        "scoring": {
+          "scale": "0-5",
+          "dimensions": [
+            {
+              "id": "adjacency_to_profile",
+              "weight": 0.35,
+              "definition": "How adjacent the prime’s catalog is to the company profile strengths (e.g., technology accessories / IT peripherals)."
+            },
+            {
+              "id": "public_sector_maturity",
+              "weight": 0.15,
+              "definition": "Evidence they sell to K-12/public sector (contracts, edu pages, cooperative listings)."
+            },
+            {
+              "id": "sub_likelihood",
+              "weight": 0.35,
+              "definition": "Signals they use partners/subs: reseller programs, dealer networks, partner pages."
+            },
+            {
+              "id": "regional_alignment",
+              "weight": 0.15,
+              "definition": "Texas presence or district-relevant logistics footprint."
+            }
+          ],
+          "output": "fit_score_0_5"
+        },
+        "post_processing": {
+          "tiering_rules_ref": "tiering_rules",
+          "outputs": [
+            "tier",
+            "ranked_prime_targets"
+          ]
+        }
+      },
+      {
+        "step_id": "PLA_5_DISCOVER_CONTACT_PATHS",
+        "name": "Discover contact paths (public only)",
+        "method": "Use official company sites + reputable cooperative directories; do not scrape gated systems; include source_location",
+        "outputs": [
+          "contact_intel_rows"
+        ]
+      },
+      {
+        "step_id": "PLA_6_GENERATE_SUB_POSITIONING",
+        "name": "Generate sub positioning per Tier 1-2 primes",
+        "method": "Produce a short pitch angle based on adjacency and RFP lanes; list what you can cover + what is adjacent via partner; do not invent OEM authorizations.",
+        "outputs": [
+          "sub_positioning_bullets",
+          "outreach_templates"
+        ]
+      },
+      {
+        "step_id": "PLA_7_OUTPUT_INSERTION_BLOCKS",
+        "name": "Create report insertion block",
+        "method": "Generate a compact narrative block suitable for insertion into the main report",
+        "outputs": [
+          "report_block_PLA_SUMMARY"
+        ]
+      }
+    ]
+  },
+  "report_insertion_template": {
+    "block_id": "PLA_SUMMARY",
+    "structure": [
+      "1) Closest Historical Procurement (renewal vs new)",
+      "2) Competition Intensity (🟢/🟡/🔴) + rationale",
+      "3) Prime Targets (Tier 1/Tier 2) with fit rationale",
+      "4) Contact Paths (how to reach: gov/edu sales, bid desk, partner program)",
+      "5) Sub Positioning Strategy (what you cover + adjacent OEM coverage approach)",
+      "6) Immediate Outreach Next Steps (3 bullets)"
+    ]
+  },
+  "guardrails": {
+    "no_guessing_contacts": true,
+    "public_only_sources": true,
+    "require_source_location_for_each_email": true,
+    "if_contact_not_found": "Return role-based targeting guidance instead of fabricating a person/email"
+  }
+}
