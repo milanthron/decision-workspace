@@ -1,0 +1,229 @@
+﻿{
+  "framework_name": "RFI_Triage_Intellegence_Framework",  
+"version": "5.1",
+  "purpose": "Profile-driven, LLM-assisted RFI evaluation system designed for small businesses pursuing subcontract and partnership-led growth.",
+  "philosophy": {
+    "rfi_definition": "RFIs are positioning and relationship tools, not bid filters.",
+    "primary_growth_strategy": "Subcontract-first with prime ecosystem engagement.",
+    "analysis_intent": "Generate structured, reviewable LLM analysis to support human-led capture decisions.",
+    "success_metrics": [
+      "Prime introductions",
+      "Agency visibility",
+      "Early capture awareness",
+      "Recompete detection",
+      "Partner ecosystem expansion",
+      "Improved RFP positioning"
+    ]
+  },
+  "profile_usage": {
+    "blocking": false,
+    "hard_stop_only_blocks": true,
+    "missing_section_behavior": "Log gap and continue analysis.",
+    "sections_used": [
+      "capabilities",
+      "past_performance",
+      "partner_ecosystem",
+      "delivery_capacity",
+      "risk_model",
+      "guardrails"
+    ]
+  },
+  "positioning_score_model": {
+    "scale": {
+      "min": 0,
+      "max": 5,
+      "meaning": "5 = highest strategic positioning value"
+    },
+    "dimensions": {
+      "agency_exposure": {
+        "weight": 0.20,
+        "description": "Strategic value of agency access."
+      },
+      "prime_ecosystem_potential": {
+        "weight": 0.25,
+        "description": "Likelihood of large integrator involvement."
+      },
+      "shaping_influence": {
+        "weight": 0.20,
+        "description": "Early acquisition stage and influence opportunity."
+      },
+      "capability_alignment": {
+        "weight": 0.20,
+        "description": "Match to company capabilities (direct or adjacent)."
+      },
+      "recompete_signal": {
+        "weight": 0.15,
+        "description": "Presence of incumbent or follow-on indicators."
+      }
+    },
+    "tier_thresholds": {
+      "tier_1": { "min": 4.0, "max": 5.0 },
+      "tier_2": { "min": 3.0, "max": 3.9 },
+      "tier_3": { "min": 2.0, "max": 2.9 },
+      "monitor": { "min": 0.0, "max": 1.9 }
+    }
+  },
+  "modules": {
+    "prime_mapping_sub_engine": {
+      "intent": "Identify likely prime contractors and teaming opportunities.",
+      "signals_detected": [
+        "enterprise-wide scope",
+        "multi-disciplinary integration",
+        "IDIQ references",
+        "large-scale deployment",
+        "systems integrator language"
+      ],
+      "profile_cross_reference": [
+        "partner_ecosystem.preferred_primes",
+        "partner_ecosystem.oem_partners",
+        "past_performance.prime_or_sub"
+      ],
+      "outputs": [
+        "prime_potential_score",
+        "suggested_prime_targets",
+        "prime_engagement_flag"
+      ]
+    },
+    "recompete_intelligence_layer": {
+      "intent": "Detect incumbent or follow-on signals for early capture.",
+      "detection_keywords": [
+        "incumbent",
+        "recompete",
+        "follow-on",
+        "contract number",
+        "current contractor",
+        "period of performance"
+      ],
+      "actions_triggered": [
+        "flag_recompete",
+        "recommend_award_research",
+        "identify_incumbent_prime",
+        "suggest_teaming_entry_point"
+      ]
+    },
+    "networking_outreach_playbook": {
+      "intent": "Convert RFIs into structured relationship actions.",
+      "profile_inputs": [
+        "past_performance",
+        "preferred_primes",
+        "oem_partners",
+        "primary_pocs",
+        "industry_focus"
+      ],
+      "generated_actions": [
+        "government_follow_up",
+        "prime_outreach",
+        "oem_engagement",
+        "internal_capture_tasks"
+      ]
+    }
+  },
+  "llm_scoring_contract": {
+    "schema_name": "RFI_Positioning_Eval_Output",
+    "schema_version": "1.0",
+    "required_output": {
+      "run_metadata": {
+        "run_id": "string",
+        "run_timestamp_utc": "ISO-8601 string",
+        "input_dataset": {
+          "source_name": "string",
+          "total_rows_evaluated": "integer",
+          "filters_applied": ["string"]
+        }
+      },
+      "profile_lens": {
+        "capability_clusters": [
+          {
+            "cluster_name": "string",
+            "keywords": ["string"],
+            "notes": "string"
+          }
+        ],
+        "target_agencies": ["string"],
+        "target_industries": ["string"],
+        "delivery_strategy_preference": "prime|sub|hybrid|unknown",
+        "assumptions_used": ["string"]
+      },
+      "opportunity_evaluations": [
+        {
+          "rank": "integer",
+          "notice": {
+            "notice_id": "string",
+            "title": "string",
+            "agency": "string",
+            "posted_date": "YYYY-MM-DD",
+            "due_date": "YYYY-MM-DD",
+            "days_remaining": "integer",
+            "set_aside": "string",
+            "naics": "string",
+            "psc": "string"
+          },
+          "llm_scoring": {
+            "dimensions": {
+              "agency_exposure": {
+                "score": "0-5",
+                "justification": "string",
+                "evidence_phrases": ["string"],
+                "confidence": "low|medium|high"
+              },
+              "prime_ecosystem_potential": {
+                "score": "0-5",
+                "justification": "string",
+                "evidence_phrases": ["string"],
+                "confidence": "low|medium|high"
+              },
+              "shaping_influence": {
+                "score": "0-5",
+                "justification": "string",
+                "evidence_phrases": ["string"],
+                "confidence": "low|medium|high"
+              },
+              "capability_alignment": {
+                "score": "0-5",
+                "alignment_type": "direct|adjacent|weak|unknown",
+                "mapped_profile_clusters": ["string"],
+                "justification": "string",
+                "evidence_phrases": ["string"],
+                "confidence": "low|medium|high"
+              },
+              "recompete_signal": {
+                "score": "0-5",
+                "signal_type": "none|possible|clear",
+                "justification": "string",
+                "evidence_phrases": ["string"],
+                "confidence": "low|medium|high"
+              }
+            },
+            "positioning_score": "0-5",
+            "tier": "tier_1|tier_2|tier_3|monitor"
+          },
+          "flags": {
+            "award_research_recommended": "boolean",
+            "prime_mapping_recommended": "boolean",
+            "networking_outreach_recommended": "boolean",
+            "metadata_missing": ["string"],
+            "profile_gap_impacted": ["string"]
+          },
+          "recommended_actions": {
+            "response_depth": "full|light|monitor",
+            "response_intent": "positioning|shaping|teaming|learning",
+            "outreach_targets": {
+              "government_poc": "boolean",
+              "prime_targets": ["string"],
+              "oem_or_partner_targets": ["string"]
+            },
+            "clarifying_questions": ["string"],
+            "next_steps_7_days": ["string"]
+          }
+        }
+      ]
+    }
+  },
+  "governance": {
+    "hard_stops_override": true,
+    "profile_driven_weights": true,
+    "no_static_capability_filters": true,
+    "rfis_not_delivery_validations": true,
+    "human_review_required": true
+  }
+}
