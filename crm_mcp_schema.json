@@ -59,5 +59,8 @@
     "preserve_user_edits": true,
     "multiple_contacts_per_organization": true,
     "contact_scope_required": true
+    ,"campaign_name_required": true
+    ,"unassigned_review_rule": "cintman_campaign_name is unknown"
+    ,"delete_policy": "never_auto_delete"
   }
 }
