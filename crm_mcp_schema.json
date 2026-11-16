@@ -2,7 +2,11 @@
   "schema_name": "DW_CRM_Handoff",
   "schema_version": "0.2.0",
   "mapping_version": "shared-crm-identity-0.2.0",
-  "operations": ["prepare_company_sync", "prepare_contact_sync", "reconcile"],
+  "operations": [
+    "prepare_company_sync",
+    "prepare_contact_sync",
+    "reconcile"
+  ],
   "input": {
     "tenant_id": "string",
     "campaign_id": "campaign_<tenant>_<stable-key>",
@@ -12,7 +16,13 @@
       "source_subtype": "rfq|rfi|prime_landscape|agency|partner|general",
       "campaign_id": "string",
       "record_id": "string",
-      "provenance": [{"url": "string", "observed_at": "ISO-8601", "source_label": "string"}]
+      "provenance": [
+        {
+          "url": "string",
+          "observed_at": "ISO-8601",
+          "source_label": "string"
+        }
+      ]
     },
     "external_refs": "object",
     "decision_state": "PENDING|GO|NO_GO|CONDITIONAL",
@@ -23,7 +33,8 @@
       "source_record_id": "string",
       "role_context": "opportunity_poc|agency_contact|prime_vendor_contact|federal_department_contact|state_department_contact|partner_contact|general"
     },
-    "dw_state": "object"
+    "dw_state": "object",
+    "campaign_name": "Human-readable campaign label"
   },
   "output": {
     "operation_key": "string",
@@ -32,8 +43,13 @@
       "external_ids": "object",
       "readback_at": "ISO-8601",
       "mapping_version": "string",
-      "missing": ["string"],
-      "conflicts": ["string"]
+      "missing": [
+        "string"
+      ],
+      "conflicts": [
+        "string"
+      ],
+      "campaign_display_name_property": "cintman_campaign_name"
     }
   },
   "guardrails": {
