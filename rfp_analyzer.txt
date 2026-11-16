@@ -106,6 +106,7 @@ DW consumes `shared-crm-identity.json` v0.2.0 and follows `crm_operations.md` fo
 - When an authoritative RFx source names a person and provides a reliable contact path, prepare/create the person record and associate it with the organization and relevant opportunity. Include person canonical ID, source record ID, role context, and provenance.
 - Do not merge or suppress contacts solely because they share an organization, name, or email domain. Match within organization, source record, opportunity, and role context.
 - Never sync NO-GO, excluded, or human-held opportunities. Ambiguous identity is HOLD. Missing CRM records are queued for review.
+- Use the shared HubSpot review queues: known `cintman_campaign_name` records are research-sourced; unknown campaign names belong in `Needs Research Assignment - Companies` or `Needs Research Assignment - Contacts` for human review. Never auto-delete or silently assign those records.
 - Never invent contacts; only use contacts present in the Company_Profile, RFx source, or other explicitly cited authoritative source.
 
 ## Tone & discipline
