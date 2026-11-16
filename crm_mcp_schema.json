@@ -1,0 +1,39 @@
+{
+  "schema_name": "DW_CRM_Handoff",
+  "schema_version": "0.2.0",
+  "mapping_version": "shared-crm-identity-0.2.0",
+  "operations": ["prepare_company_sync", "prepare_contact_sync", "reconcile"],
+  "input": {
+    "tenant_id": "string",
+    "campaign_id": "campaign_<tenant>_<stable-key>",
+    "canonical_id": "org|person|opportunity_<tenant>_<stable-key>",
+    "source_ref": {
+      "source_type": "research",
+      "source_subtype": "rfq|rfi|prime_landscape|agency|partner|general",
+      "campaign_id": "string",
+      "record_id": "string",
+      "provenance": [{"url": "string", "observed_at": "ISO-8601", "source_label": "string"}]
+    },
+    "external_refs": "object",
+    "decision_state": "PENDING|GO|NO_GO|CONDITIONAL",
+    "posture": "SUB|PRIME|BOTH|MONITOR",
+    "dw_state": "object"
+  },
+  "output": {
+    "operation_key": "string",
+    "status": "PREPARED|VERIFIED|HOLD|PARTIAL|FAILED",
+    "crm_sync": {
+      "external_ids": "object",
+      "readback_at": "ISO-8601",
+      "mapping_version": "string",
+      "missing": ["string"],
+      "conflicts": ["string"]
+    }
+  },
+  "guardrails": {
+    "no_auto_create_from_discovery": true,
+    "no_sync_no_go_or_held": true,
+    "ambiguous_identity": "HOLD",
+    "preserve_user_edits": true
+  }
+}
