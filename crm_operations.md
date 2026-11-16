@@ -43,6 +43,12 @@ Use the live shared properties:
 
 `cintman_campaign_name` is the human-readable display label for saved views. `cintman_campaign_id` remains the stable matching key.
 
+Use the HubSpot review surfaces consistently:
+- **Research-Sourced Companies** / **Research-Sourced Contacts** filter `cintman_campaign_name is known`.
+- **Needs Research Assignment - Companies** / **Needs Research Assignment - Contacts** filter `cintman_campaign_name is unknown`.
+
+The unknown queue is a human review queue for records created outside Evidra/DW or missing campaign provenance. Reviewers may assign a record to an Evidra campaign or DW search after confirming its source. Do not auto-delete, auto-assign, or treat an email-created record as research-sourced merely because it has an associated company.
+
 Provider object IDs remain under `crm_sync.external_ids`. Links, evidence, campaigns, and opportunities remain in DW unless a future CRM object mapping is explicitly approved.
 
 ## Handoff payload
@@ -83,3 +89,4 @@ Provider object IDs remain under `crm_sync.external_ids`. Links, evidence, campa
 7. Read back every company, contact, association, canonical ID, source reference, and suppression state.
 8. A company success with missing contacts or missing opportunity provenance is partial failure when the source supplied those fields.
 9. Missing CRM records are queued for explicit review; do not auto-create from discovery alone.
+10. Verify that every intended research record has a known human-readable campaign name. If campaign context is missing, place the record in the unassigned review queue and report it as PARTIAL until resolved.
