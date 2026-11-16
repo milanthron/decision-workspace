@@ -17,6 +17,12 @@
     "external_refs": "object",
     "decision_state": "PENDING|GO|NO_GO|CONDITIONAL",
     "posture": "SUB|PRIME|BOTH|MONITOR",
+    "contact_context": {
+      "organization_canonical_id": "org_<tenant>_<stable-key>",
+      "opportunity_canonical_id": "opportunity_<tenant>_<stable-key>|null",
+      "source_record_id": "string",
+      "role_context": "opportunity_poc|agency_contact|prime_vendor_contact|federal_department_contact|state_department_contact|partner_contact|general"
+    },
     "dw_state": "object"
   },
   "output": {
@@ -34,6 +40,8 @@
     "no_auto_create_from_discovery": true,
     "no_sync_no_go_or_held": true,
     "ambiguous_identity": "HOLD",
-    "preserve_user_edits": true
+    "preserve_user_edits": true,
+    "multiple_contacts_per_organization": true,
+    "contact_scope_required": true
   }
 }
