@@ -38,8 +38,10 @@ Do not flatten or overwrite decision-support state when syncing:
 
 ## HubSpot mapping
 Use the live shared properties:
-- Company: `cintman_canonical_id`, `cintman_source_reference`, `cintman_campaign_id`
-- Contact: `cintman_canonical_id`, `cintman_source_reference`, `cintman_campaign_id`
+- Company: `cintman_canonical_id`, `cintman_source_reference`, `cintman_campaign_id`, `cintman_campaign_name`
+- Contact: `cintman_canonical_id`, `cintman_source_reference`, `cintman_campaign_id`, `cintman_campaign_name`
+
+`cintman_campaign_name` is the human-readable display label for saved views. `cintman_campaign_id` remains the stable matching key.
 
 Provider object IDs remain under `crm_sync.external_ids`. Links, evidence, campaigns, and opportunities remain in DW unless a future CRM object mapping is explicitly approved.
 
