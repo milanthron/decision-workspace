@@ -111,6 +111,16 @@
       "role_context"
     ],
     "hubspot_campaign_name_property": "cintman_campaign_name",
-    "campaign_display_property": "cintman_campaign_name"
+    "campaign_display_property": "cintman_campaign_name",
+    "research_sourced_view_names": {
+      "companies": "Research-Sourced Companies",
+      "contacts": "Research-Sourced Contacts"
+    },
+    "unassigned_review_view_names": {
+      "companies": "Needs Research Assignment - Companies",
+      "contacts": "Needs Research Assignment - Contacts"
+    },
+    "unassigned_review_rule": "cintman_campaign_name is unknown",
+    "delete_policy": "Never auto-delete; require explicit human review and action"
   }
 }
