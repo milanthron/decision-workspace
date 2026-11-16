@@ -24,6 +24,13 @@
     "person": {"external_key": "poc_or_contact_key"},
     "evidence": {"external_key": "evidence_ref_or_section_page"}
   },
+  "contact_context": {
+    "multiple_contacts_per_organization": true,
+    "scope_key": ["tenant_id", "organization_canonical_id", "source_ref.record_id", "role_context"],
+    "allowed_contexts": ["opportunity_poc", "agency_contact", "prime_vendor_contact", "federal_department_contact", "state_department_contact", "partner_contact", "general"],
+    "dedupe_rule": "Do not merge or suppress contacts solely because they share an organization, name, or email domain. Match by provider_id, canonical_id, or corroborated person identity within the source and role context.",
+    "creation_rule": "Create or associate a contact when the authoritative research source provides a named person and a reliable contact path. Preserve the source and opportunity context."
+  },
   "preserved_dw_state": [
     "decision",
     "posture",
@@ -47,6 +54,8 @@
     "match_order": ["provider_id", "canonical_id", "corroborated_domain_address_phone", "normalized_email_profile_phone_company"],
     "ambiguous_action": "HOLD",
     "excluded_or_held_action": "do_not_update",
-    "missing_record_action": "queue_for_review"
+    "missing_record_action": "queue_for_review",
+    "contact_scope_required": true,
+    "contact_scope_fields": ["organization_canonical_id", "opportunity_canonical_id", "source_ref.record_id", "role_context"]
   }
 }
