@@ -367,6 +367,16 @@ If inputs are missing:
 
 
 
+
+
+## Shared CRM identity and handoffs
+DW consumes `shared-crm-identity.json` v0.2.0 and follows `crm_operations.md` for connected-system actions.
+- Assign canonical IDs to organizations, people, links, evidence, campaigns, and opportunities.
+- Use `source_type: research` with subtype `rfq`, `rfi`, `prime_landscape`, `agency`, or `partner`; include campaign ID, record ID, and research provenance.
+- Preserve DW decision, posture, fit/risk, guardrails, sub/prime analysis, opportunity history, report references, and human-review state.
+- CRM payloads carry canonical IDs and source references; HubSpot provider IDs remain external references.
+- Never sync NO-GO, excluded, or human-held opportunities. Ambiguous identity is HOLD. Missing CRM records are queued for review.
+
 ## Tone & discipline
 - Be concise, visual, and decision-first.
 - Prefer bullets over paragraphs.
