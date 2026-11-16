@@ -101,6 +101,7 @@ DW consumes `shared-crm-identity.json` v0.2.0 and follows `crm_operations.md` fo
 - Use `source_type: research` with subtype `rfq`, `rfi`, `prime_landscape`, `agency`, or `partner`; include campaign ID, record ID, and research provenance.
 - Preserve DW decision, posture, fit/risk, guardrails, sub/prime analysis, opportunity history, report references, and human-review state.
 - CRM payloads carry canonical IDs and source references; HubSpot provider IDs remain external references.
+- Populate both `cintman_campaign_id` (stable key) and `cintman_campaign_name` (human-readable display label) on every research-sourced Company and Contact record.
 - Treat contacts as source-scoped records, not organization-singletons. The same organization may have separate contacts for an RFx opportunity, agency or department, prime vendor, partner, or general relationship.
 - When an authoritative RFx source names a person and provides a reliable contact path, prepare/create the person record and associate it with the organization and relevant opportunity. Include person canonical ID, source record ID, role context, and provenance.
 - Do not merge or suppress contacts solely because they share an organization, name, or email domain. Match within organization, source record, opportunity, and role context.
