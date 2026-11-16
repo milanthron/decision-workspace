@@ -13,21 +13,59 @@
   },
   "source_ref": {
     "source_type": "research",
-    "source_subtypes": ["rfq", "rfi", "prime_landscape", "agency", "partner", "general"],
-    "required": ["campaign_id", "record_id", "provenance"],
-    "provenance_item": ["url", "observed_at", "source_label"]
+    "source_subtypes": [
+      "rfq",
+      "rfi",
+      "prime_landscape",
+      "agency",
+      "partner",
+      "general"
+    ],
+    "required": [
+      "campaign_id",
+      "record_id",
+      "provenance"
+    ],
+    "provenance_item": [
+      "url",
+      "observed_at",
+      "source_label"
+    ]
   },
   "dw_mapping": {
-    "campaign": {"external_key": "search_or_batch_id"},
-    "opportunity": {"external_key": "notice_id_or_opportunity_id"},
-    "organization": {"external_key": "agency_or_prime_key"},
-    "person": {"external_key": "poc_or_contact_key"},
-    "evidence": {"external_key": "evidence_ref_or_section_page"}
+    "campaign": {
+      "external_key": "search_or_batch_id"
+    },
+    "opportunity": {
+      "external_key": "notice_id_or_opportunity_id"
+    },
+    "organization": {
+      "external_key": "agency_or_prime_key"
+    },
+    "person": {
+      "external_key": "poc_or_contact_key"
+    },
+    "evidence": {
+      "external_key": "evidence_ref_or_section_page"
+    }
   },
   "contact_context": {
     "multiple_contacts_per_organization": true,
-    "scope_key": ["tenant_id", "organization_canonical_id", "source_ref.record_id", "role_context"],
-    "allowed_contexts": ["opportunity_poc", "agency_contact", "prime_vendor_contact", "federal_department_contact", "state_department_contact", "partner_contact", "general"],
+    "scope_key": [
+      "tenant_id",
+      "organization_canonical_id",
+      "source_ref.record_id",
+      "role_context"
+    ],
+    "allowed_contexts": [
+      "opportunity_poc",
+      "agency_contact",
+      "prime_vendor_contact",
+      "federal_department_contact",
+      "state_department_contact",
+      "partner_contact",
+      "general"
+    ],
     "dedupe_rule": "Do not merge or suppress contacts solely because they share an organization, name, or email domain. Match by provider_id, canonical_id, or corroborated person identity within the source and role context.",
     "creation_rule": "Create or associate a contact when the authoritative research source provides a named person and a reliable contact path. Preserve the source and opportunity context."
   },
@@ -49,13 +87,30 @@
     "hubspot_contact_property": "cintman_canonical_id",
     "hubspot_source_property": "cintman_source_reference",
     "hubspot_campaign_property": "cintman_campaign_id",
-    "unsupported_entities": ["LINK", "EVIDENCE", "CAMPAIGN", "OPPORTUNITY"],
+    "unsupported_entities": [
+      "LINK",
+      "EVIDENCE",
+      "CAMPAIGN",
+      "OPPORTUNITY"
+    ],
     "unsupported_entity_policy": "Keep DW canonical records and provenance in DW history/store; retain provider IDs in crm_sync.external_ids.",
-    "match_order": ["provider_id", "canonical_id", "corroborated_domain_address_phone", "normalized_email_profile_phone_company"],
+    "match_order": [
+      "provider_id",
+      "canonical_id",
+      "corroborated_domain_address_phone",
+      "normalized_email_profile_phone_company"
+    ],
     "ambiguous_action": "HOLD",
     "excluded_or_held_action": "do_not_update",
     "missing_record_action": "queue_for_review",
     "contact_scope_required": true,
-    "contact_scope_fields": ["organization_canonical_id", "opportunity_canonical_id", "source_ref.record_id", "role_context"]
+    "contact_scope_fields": [
+      "organization_canonical_id",
+      "opportunity_canonical_id",
+      "source_ref.record_id",
+      "role_context"
+    ],
+    "hubspot_campaign_name_property": "cintman_campaign_name",
+    "campaign_display_property": "cintman_campaign_name"
   }
 }
